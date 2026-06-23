@@ -1063,6 +1063,68 @@
       background-position: right 1rem center;
       padding-right: 2.5rem;
     }
+
+    .avatar-upload-area {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px dashed #c8c0d8;
+      margin: 0 auto .5rem;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+      background: #f4f2f9;
+    }
+
+    .avatar-upload-area:hover {
+      border-color: var(--lavender);
+      background: #eae6f4;
+    }
+
+    .avatar-upload-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .avatar-upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .15rem;
+    }
+
+    .user-chip-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .avatar-clickable {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .avatar-clickable::after {
+      content: '\1F4F7';
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      font-size: .7rem;
+      background: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    }
   </style>
 </head>
 <body>
@@ -1232,6 +1294,17 @@
           <p class="subtitle">Complete your details to register</p>
 
           <form id="register-form" onsubmit="return handleRegister(event)">
+            <div class="form-group" style="text-align:center;">
+              <label style="text-align:center;display:block;">Profile Picture</label>
+              <div class="avatar-upload-area" onclick="document.getElementById('reg-photo').click()">
+                <img id="reg-photo-preview" class="avatar-upload-img" style="display:none;">
+                <div id="reg-photo-placeholder" class="avatar-upload-placeholder">
+                  <span style="font-size:2rem;">&#128247;</span>
+                  <span style="font-size:.75rem;color:var(--text-muted);">Click to upload</span>
+                </div>
+              </div>
+              <input type="file" id="reg-photo" accept="image/*" style="display:none;" onchange="previewRegisterPhoto(event)">
+            </div>
             <div class="form-group">
               <label>Full Name</label>
               <div class="input-wrapper">
@@ -1472,9 +1545,10 @@
           </div>
           <div class="app-header-right">
             <div class="user-chip">
-              <div class="user-chip-avatar" id="header-avatar">U</div>
+              <div class="user-chip-avatar avatar-clickable" id="header-avatar" onclick="document.getElementById('change-photo').click()">U</div>
               <span id="header-username">User</span>
             </div>
+            <input type="file" id="change-photo" accept="image/*" style="display:none;" onchange="changeProfilePhoto(event)">
             <button class="btn-header danger" onclick="logout()">Log Out</button>
           </div>
         </div>
@@ -1649,13 +1723,58 @@
       if (users.some(u => u.username === username)) { errEl.textContent = 'Username already exists'; errEl.classList.add('show'); return false; }
       if (users.some(u => u.email === email)) { errEl.textContent = 'Email already registered'; errEl.classList.add('show'); return false; }
 
-      users.push({ id: Date.now(), name, email, area, username, doc, password: pass, createdAt: new Date().toISOString() });
+      users.push({ id: Date.now(), name, email, area, username, doc, password: pass, photo: profilePhoto, createdAt: new Date().toISOString() });
       saveUsers(users);
       errEl.classList.remove('show');
       showToast('Account created. Please log in.', 'success');
       showScreen('screen-login');
       document.getElementById('register-form').reset();
+      profilePhoto = null;
+      document.getElementById('reg-photo-preview').style.display = 'none';
+      document.getElementById('reg-photo-placeholder').style.display = 'flex';
       return false;
+    }
+
+    let profilePhoto = null;
+
+    function previewRegisterPhoto(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        profilePhoto = ev.target.result;
+        document.getElementById('reg-photo-preview').src = profilePhoto;
+        document.getElementById('reg-photo-preview').style.display = 'block';
+        document.getElementById('reg-photo-placeholder').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function changeProfilePhoto(e) {
+      const file = e.target.files[0];
+      if (!file || !currentUser) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const photo = ev.target.result;
+        currentUser.photo = photo;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+        const users = getUsers();
+        const idx = users.findIndex(u => u.id === currentUser.id);
+        if (idx !== -1) { users[idx].photo = photo; saveUsers(users); }
+        updateAvatarDisplay();
+        showToast('Profile photo updated', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateAvatarDisplay() {
+      if (!currentUser) return;
+      const avatar = document.getElementById('header-avatar');
+      if (currentUser.photo) {
+        avatar.innerHTML = '<img src="' + currentUser.photo + '" alt="Profile">';
+      } else {
+        avatar.innerHTML = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      }
     }
 
     function togglePass(inputId, btn) {
@@ -1689,9 +1808,8 @@
       showScreen('screen-app');
       const isDoc = role === 'docente';
       document.getElementById('header-title').textContent = isDoc ? 'Teacher Panel' : 'Psychologist Panel';
-      const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-      document.getElementById('header-avatar').textContent = initials;
       document.getElementById('header-username').textContent = currentUser.name;
+      updateAvatarDisplay();
       document.getElementById('section-docente').classList.toggle('active', isDoc);
       document.getElementById('section-psicologo').classList.toggle('active', !isDoc);
       renderAll();
