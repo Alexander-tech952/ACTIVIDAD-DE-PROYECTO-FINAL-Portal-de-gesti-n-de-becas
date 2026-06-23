@@ -1389,10 +1389,11 @@
           <div class="laptop-screen">
             <div class="laptop-screen-inner">
               <div class="laptop-title-bar">
-                <h2>SELECT YOUR PATH TO BEGIN YOUR APPLICATION JOURNEY <span class="arrow">&rarr;</span></h2>
+                <h2 id="welcome-title">SELECT YOUR PATH TO BEGIN YOUR APPLICATION JOURNEY <span class="arrow">&rarr;</span></h2>
+                <p id="welcome-subtitle" style="color:rgba(255,255,255,.85);font-size:.85rem;margin-top:.25rem;">Please select your professional role to begin your unique application journey.</p>
               </div>
               <div class="role-cards-area">
-                <div class="role-card teacher" onclick="enterAsRole('docente')">
+                <div class="role-card teacher" id="role-card-docente" onclick="enterAsRole('docente')">
                   <div class="role-card-icon">
                     <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect x="18" y="25" width="48" height="35" rx="4" fill="#8b6cb8" fill-opacity=".3"/>
@@ -1412,7 +1413,7 @@
                   <p>For all Educators, Teachers, Lecturers, and Education Professionals</p>
                 </div>
 
-                <div class="role-card psychologist" onclick="enterAsRole('psicologo')">
+                <div class="role-card psychologist" id="role-card-psicologo" onclick="enterAsRole('psicologo')">
                   <div class="role-card-icon">
                     <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <ellipse cx="45" cy="40" rx="24" ry="20" fill="#7ab0c8" fill-opacity=".3"/>
@@ -1474,7 +1475,6 @@
               <div class="user-chip-avatar" id="header-avatar">U</div>
               <span id="header-username">User</span>
             </div>
-            <button class="btn-header" onclick="showScreen('screen-welcome')">&#8592; Change Role</button>
             <button class="btn-header danger" onclick="logout()">Log Out</button>
           </div>
         </div>
@@ -1671,6 +1671,16 @@
 
     function showWelcome() {
       if (!currentUser) return;
+      const role = getUserRole();
+      const isDoc = role === 'docente';
+      document.getElementById('role-card-docente').style.display = isDoc ? 'block' : 'none';
+      document.getElementById('role-card-psicologo').style.display = !isDoc ? 'block' : 'none';
+      document.getElementById('welcome-title').innerHTML = isDoc
+        ? 'APPLY NOW FOR THE<br>FULLY-FUNDED GLOBAL SCHOLARSHIP'
+        : 'APPLY NOW FOR THE<br>FULLY-FUNDED GLOBAL SCHOLARSHIP';
+      document.getElementById('welcome-subtitle').textContent = isDoc
+        ? 'Please select your professional role to begin your unique application journey.'
+        : 'Please select your professional role to begin your unique application journey.';
       showScreen('screen-welcome');
     }
 
