@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Scholarship for Educators</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --lavender: #8b7ec8;
+      --lavender-dark: #6b5daa;
+      --lavender-light: #a89cd8;
+      --lavender-bg: #d4ccee;
+      --blue: #7bb8d4;
+      --blue-dark: #5a9bbd;
+      --blue-light: #9dcfe6;
+      --purple-btn: #b8a0d8;
+      --purple-btn-hover: #a088c8;
+      --teal: #0d7377;
+      --teal-dark: #095456;
+      --purple: #7c3aed;
+      --purple-dark: #6d28d9;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --bg: #f0eef5;
+      --card: #ffffff;
+      --text: #1a202c;
+      --text-muted: #64748b;
+      --border: #e2e0ea;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,.08), 0 2px 4px -2px rgba(0,0,0,.06);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,.08), 0 8px 10px -6px rgba(0,0,0,.06);
+      --shadow-xl: 0 25px 50px -12px rgba(0,0,0,.15);
+      --radius: 12px;
+      --radius-lg: 16px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ===== LIBRARY BACKGROUND ===== */
+    .library-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, #e8e4f0 0%, #d8d2e4 50%, #ccc6da 100%);
+    }
+
+    .library-bg .shelf {
+      position: absolute;
+      bottom: 0;
+      background: #b8b0c8;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .library-bg .book {
+      position: absolute;
+      border-radius: 2px;
+    }
+
+    .library-bg .cat {
+      position: absolute;
+      font-size: 2.5rem;
+    }
+
+    .library-bg .plant {
+      position: absolute;
+      font-size: 2rem;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-layout {
+      min-height: 100vh;
+      background: #f5efe6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-topbar {
+      background: #9dcfe6;
+      padding: .75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+
+    .login-topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .login-topbar-logo svg {
+      width: 44px;
+      height: 44px;
+    }
+
+    .login-topbar-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .login-topbar-nav li {
+      font-size: .82rem;
+      font-weight: 700;
+      color: #3a3050;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color .2s;
+    }
+
+    .login-topbar-nav li:hover { color: #fff; }
+
+    .login-hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 60px);
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    .login-cat-left, .login-cat-right {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .login-cat-left { left: 3%; bottom: 5%; }
+    .login-cat-right { right: 3%; bottom: 5%; }
+
+    .login-card-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem 2.25rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-xl);
+      text-align: center;
+      animation: slideUp .5s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #3a3050;
+      margin-bottom: .35rem;
+    }
+
+    .login-card .subtitle {
+      color: var(--text-muted);
+      font-size: .9rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      margin-bottom: .4rem;
+      color: #3a3050;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: .8rem 1rem .8rem 1rem;
+      border: 2px solid #e0dce8;
+      border-radius: 10px;
+      font-size: .95rem;
+      font-family: inherit;
+      transition: all .2s;
+      background: white;
+      color: var(--text);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--lavender);
+      box-shadow: 0 0 0 4px rgba(139,126,200,.12);
+    }
+
+    .form-control.no-icon { padding-left: 1rem; }
+
+    .input-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .input-toggle:hover { color: var(--lavender); }
+
+    .form-error {
+      font-size: .8rem;
+      color: var(--danger);
+      margin-top: .4rem;
+      display: none;
+    }
+
+    .form-error.show { display: block; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: .6rem 1.25rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+    }
+
+    .btn:active { transform: scale(.97); }
+
+    .btn-primary {
+      background: var(--purple-btn);
+      color: white;
+      width: 100%;
+      padding: .9rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      margin-top: .5rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .btn-primary:hover {
+      background: var(--purple-btn-hover);
+      box-shadow: 0 8px 20px rgba(184,160,216,.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-teal {
+      background: linear-gradient(135deg, var(--lavender), var(--lavender-dark));
+      color: white;
+      padding: .9rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+    }
+
+    .btn-teal:hover {
+      box-shadow: 0 8px 20px rgba(139,126,200,.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-warning { background: var(--warning); color: white; }
+    .btn-warning:hover { background: #d97706; }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .btn-outline:hover { border-color: var(--lavender); color: var(--lavender); }
+    .btn-sm { padding: .4rem .75rem; font-size: .8rem; }
+
+    .auth-links {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: .88rem;
+      color: var(--text-muted);
+    }
+
+    .auth-links a {
+      color: var(--blue-dark);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .auth-links a:hover { text-decoration: underline; }
+
+    .auth-links .forgot-link {
+      display: block;
+      margin-top: .75rem;
+    }
+
+    .login-footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: .8rem;
+      color: #8a8498;
+    }
+
+    /* ===== REGISTER SCREEN ===== */
+    .register-layout {
+      min-height: 100vh;
+      background: #f5efe6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .register-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ===== WELCOME / ROLE SELECTION SCREEN ===== */
+    .welcome-layout {
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #e8e4f0 0%, #ddd8ea 50%, #d0c9e0 100%);
+    }
+
+    .welcome-top-banner {
+      background: rgba(255,255,255,.92);
+      border-radius: 0 0 20px 20px;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 5;
+    }
+
+    .welcome-top-banner .logo-circle {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .welcome-top-banner h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #3a3050;
+      letter-spacing: -.01em;
+    }
+
+    .welcome-top-banner p {
+      font-size: .82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .welcome-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    /* Library decorative elements */
+    .library-decor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .lib-shelf {
+      position: absolute;
+      background: #c4bcd4;
+      border-radius: 3px;
+    }
+
+    .lib-books {
+      position: absolute;
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+    }
+
+    .lib-book {
+      border-radius: 2px;
+    }
+
+    .lib-cat {
+      position: absolute;
+      font-size: 2.2rem;
+      opacity: .6;
+    }
+
+    /* Laptop / Screen mockup */
+    .laptop-frame {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      width: 100%;
+    }
+
+    .laptop-screen {
+      background: var(--lavender);
+      border-radius: 16px 16px 0 0;
+      padding: 2rem 1.5rem 1.5rem;
+      border: 3px solid var(--lavender-dark);
+      position: relative;
+    }
+
+    .laptop-screen-inner {
+      background: rgba(255,255,255,.95);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .laptop-title-bar {
+      background: linear-gradient(135deg, var(--lavender), var(--blue));
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+
+    .laptop-title-bar h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: white;
+      letter-spacing: .02em;
+    }
+
+    .laptop-title-bar .arrow {
+      margin-left: .5rem;
+      font-weight: 400;
+    }
+
+    .role-cards-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      padding: 1.5rem;
+    }
+
+    .role-card {
+      border-radius: 16px;
+      padding: 2rem 1.25rem 1.5rem;
+      cursor: pointer;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .role-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px -8px rgba(0,0,0,.15);
+    }
+
+    .role-card:active { transform: translateY(-2px); }
+
+    .role-card.teacher {
+      background: linear-gradient(145deg, #d4c2ea, #c4b0dc);
+      border: 2px solid #bca8d8;
+    }
+
+    .role-card.psychologist {
+      background: linear-gradient(145deg, #b8d8ea, #a0c8de);
+      border: 2px solid #96c0d8;
+    }
+
+    .role-card-icon {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .role-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #3a3050;
+      margin-bottom: .5rem;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .role-card p {
+      font-size: .8rem;
+      color: #5a5070;
+      line-height: 1.5;
+    }
+
+    .laptop-footer-bar {
+      background: linear-gradient(135deg, var(--lavender), var(--blue));
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .laptop-footer-bar a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 600;
+      transition: color .2s;
+    }
+
+    .laptop-footer-bar a:hover { color: white; }
+
+    .laptop-base {
+      background: linear-gradient(180deg, #c8c0d8, #b8b0cc);
+      height: 14px;
+      border-radius: 0 0 8px 8px;
+      margin: 0 8%;
+      position: relative;
+    }
+
+    .laptop-base::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: #a8a0bc;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .welcome-bottom-footer {
+      text-align: center;
+      padding: .75rem 1rem;
+      font-size: .8rem;
+      color: #8a8498;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Decorative cats for welcome */
+    .decor-cat {
+      position: absolute;
+      z-index: 1;
+      opacity: .5;
+      font-size: 3rem;
+    }
+
+    .decor-cat-1 { top: 25%; left: 2%; font-size: 3.5rem; }
+    .decor-cat-2 { top: 55%; right: 1%; font-size: 2.8rem; }
+    .decor-cat-3 { bottom: 15%; left: 5%; font-size: 2.5rem; }
+
+    /* ===== MAIN APP ===== */
+    .app-layout { background: var(--bg); }
+
+    .app-header {
+      background: linear-gradient(135deg, var(--lavender), var(--lavender-dark));
+      color: white;
+      padding: .85rem 1.5rem;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .app-header-left {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .app-header-logo {
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-header h1 { font-size: 1.1rem; font-weight: 700; }
+
+    .app-header-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(10px);
+      padding: .4rem .9rem;
+      border-radius: 50px;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+
+    .user-chip-avatar {
+      width: 30px;
+      height: 30px;
+      background: white;
+      color: var(--lavender);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 800;
+    }
+
+    .btn-header {
+      background: rgba(255,255,255,.2);
+      border: 1.5px solid rgba(255,255,255,.3);
+      color: white;
+      padding: .45rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: .8rem;
+      font-family: inherit;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    .btn-header:hover { background: rgba(255,255,255,.3); }
+
+    .btn-header.danger {
+      background: rgba(220,38,38,.8);
+      border-color: rgba(220,38,38,.8);
+    }
+
+    .btn-header.danger:hover { background: rgba(220,38,38,1); }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn .3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--text);
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: transform .2s;
+    }
+
+    .stat-box:hover { transform: translateY(-2px); }
+
+    .stat-box .stat-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto .75rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .stat-box.total .stat-icon { background: #e8e0f4; color: var(--lavender); }
+    .stat-box.assist .stat-icon { background: #dcfce7; color: #16a34a; }
+    .stat-box.absent .stat-icon { background: #fee2e2; color: #dc2626; }
+    .stat-box.alert .stat-icon { background: #fef3c7; color: #f59e0b; }
+
+    .stat-box .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .stat-box.total .stat-num { color: var(--lavender); }
+    .stat-box.assist .stat-num { color: #16a34a; }
+    .stat-box.absent .stat-num { color: #dc2626; }
+    .stat-box.alert .stat-num { color: #f59e0b; }
+
+    .stat-box .stat-lbl {
+      font-size: .72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 600;
+      margin-top: .25rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table { width: 100%; border-collapse: collapse; min-width: 850px; }
+
+    thead th {
+      background: #f4f2f9;
+      padding: .8rem 1rem;
+      text-align: left;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: .8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: .88rem;
+      vertical-align: middle;
+    }
+
+    tbody tr { transition: background .15s; }
+    tbody tr:hover { background: #f8f6fc; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      padding: .25rem .65rem;
+      border-radius: 50px;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      white-space: nowrap;
+    }
+
+    .badge-present { background: #dcfce7; color: #166534; }
+    .badge-absent { background: #fee2e2; color: #991b1b; }
+    .badge-pending { background: #f1f5f9; color: #64748b; }
+    .badge-alert { background: #fef3c7; color: #92400e; }
+    .badge-normal { background: #dcfce7; color: #166534; }
+
+    .score-input { display: flex; align-items: center; gap: .35rem; }
+    .score-input input[type="number"] {
+      width: 58px;
+      padding: .4rem .5rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: .9rem;
+      font-weight: 700;
+      font-family: inherit;
+    }
+    .score-input input[type="number"]:focus { outline: none; border-color: var(--lavender); }
+    .score-input .score-lbl { font-size: .7rem; color: var(--text-muted); font-weight: 600; }
+
+    .alert-card {
+      background: white;
+      border: 2px solid #fbbf24;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all .2s;
+    }
+    .alert-card:hover { box-shadow: var(--shadow-lg); }
+    .alert-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: .75rem;
+    }
+    .alert-card-header h3 { font-size: 1.05rem; font-weight: 700; }
+    .alert-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+      margin-bottom: .75rem;
+    }
+    .alert-card-meta span { display: flex; align-items: center; gap: .3rem; }
+    .obs-list {
+      background: #f8f6fc;
+      border-radius: var(--radius);
+      padding: .85rem;
+      margin: .75rem 0;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    .obs-list .obs-item {
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .82rem;
+    }
+    .obs-list .obs-item:last-child { border-bottom: none; }
+    .obs-list .obs-date { font-size: .7rem; color: var(--text-muted); }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+    .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .empty-state h3 { font-size: 1.1rem; margin-bottom: .5rem; color: var(--text); font-weight: 700; }
+    .empty-state p { font-size: .9rem; }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      animation: modalIn .2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h2 { font-size: 1.15rem; font-weight: 700; }
+    .modal-close {
+      background: #f1f5f9;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+    .modal-close:hover { background: #e2e8f0; color: var(--text); }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: .5rem;
+      justify-content: flex-end;
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .toast {
+      padding: .85rem 1.25rem;
+      border-radius: var(--radius);
+      color: white;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn .3s ease, toastOut .3s ease 2.7s forwards;
+      max-width: 360px;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .toast-success { background: var(--success); }
+    .toast-error { background: var(--danger); }
+    .toast-info { background: var(--lavender); }
+    .toast-warning { background: var(--warning); }
+    @keyframes toastIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity:1; } to { opacity:0; transform: translateY(-10px); } }
+
+    /* Cat SVG illustrations */
+    .cat-illustration {
+      display: inline-block;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .login-topbar-nav { display: none; }
+      .login-cat-left, .login-cat-right { display: none; }
+      .welcome-top-banner { margin: 0 1rem; border-radius: 0 0 16px 16px; }
+      .decor-cat { display: none; }
+      .role-cards-area { grid-template-columns: 1fr; gap: 1rem; }
+      .laptop-screen { padding: 1.5rem 1rem 1rem; }
+    }
+
+    @media (max-width: 768px) {
+      .login-card { padding: 2rem 1.5rem; margin: 0 .5rem; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .welcome-top-banner h1 { font-size: .95rem; }
+      .welcome-top-banner p { font-size: .75rem; }
+      .laptop-title-bar h2 { font-size: .9rem; }
+
+      .app-header-content { flex-direction: column; text-align: center; }
+      .app-header-left { flex-direction: column; }
+      .app-header-right { flex-wrap: wrap; justify-content: center; }
+      .container { padding: 1rem; }
+      .card { padding: 1rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-box .stat-num { font-size: 1.5rem; }
+      table { min-width: 720px; }
+      thead th, tbody td { padding: .6rem .5rem; font-size: .78rem; }
+      .btn-sm { padding: .35rem .6rem; font-size: .72rem; }
+      .alert-card-header { flex-direction: column; }
+      .modal { margin: .5rem; }
+      .toast-container { left: 1rem; right: 1rem; bottom: 1rem; }
+      .toast { max-width: 100%; }
+    }
+
+    @media (max-width: 480px) {
+      .welcome-top-banner { padding: .75rem 1rem; }
+      .welcome-top-banner .logo-circle { width: 40px; height: 40px; }
+      .welcome-top-banner h1 { font-size: .85rem; }
+      .laptop-title-bar h2 { font-size: .8rem; }
+      .role-card h3 { font-size: .9rem; }
+      .role-card p { font-size: .75rem; }
+      .laptop-footer-bar { gap: .75rem; flex-wrap: wrap; }
+      .laptop-footer-bar a { font-size: .72rem; }
+
+      .stats-grid { gap: .5rem; }
+      .stat-box { padding: .85rem .5rem; }
+      .stat-box .stat-num { font-size: 1.3rem; }
+      .stat-box .stat-lbl { font-size: .65rem; }
+      .score-input input[type="number"] { width: 50px; }
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #c8c0d8; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a8a0bc; }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== LOGIN ==================== -->
+  <div class="screen active" id="screen-login">
+    <div class="login-layout">
+      <nav class="login-topbar">
+        <div class="login-topbar-logo">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="22" width="42" height="52" rx="3" fill="#5a4a7a" stroke="#4a3a6a" stroke-width="2"/>
+            <rect x="20" y="27" width="32" height="42" rx="2" fill="#e8e0f4"/>
+            <line x1="26" y1="36" x2="46" y2="36" stroke="#b8a8d0" stroke-width="2"/>
+            <line x1="26" y1="42" x2="46" y2="42" stroke="#b8a8d0" stroke-width="2"/>
+            <line x1="26" y1="48" x2="40" y2="48" stroke="#b8a8d0" stroke-width="2"/>
+            <path d="M50 14 L36 28 L64 28 Z" fill="#5a4a7a"/>
+            <rect x="47" y="28" width="6" height="16" rx="1" fill="#5a4a7a"/>
+            <ellipse cx="50" cy="52" rx="14" ry="6" fill="#5a4a7a"/>
+            <path d="M36 52 L50 62 L64 52" fill="none" stroke="#4a3a6a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <ul class="login-topbar-nav">
+          <li>Overview</li>
+          <li>Profile</li>
+          <li>Parents</li>
+          <li>Teachers</li>
+          <li>Contact</li>
+        </ul>
+      </nav>
+
+      <div class="login-hero">
+        <!-- Cat Left -->
+        <div class="login-cat-left">
+          <svg width="140" height="160" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="70" cy="130" rx="30" ry="10" fill="#e8e0d4" opacity=".4"/>
+            <rect x="30" y="95" width="35" height="35" rx="4" fill="#d44040"/>
+            <rect x="35" y="100" width="25" height="25" rx="2" fill="#fff"/>
+            <rect x="40" y="105" width="15" height="3" rx="1" fill="#d44040" opacity=".3"/>
+            <rect x="40" y="111" width="15" height="3" rx="1" fill="#d44040" opacity=".3"/>
+            <rect x="40" y="117" width="10" height="3" rx="1" fill="#d44040" opacity=".3"/>
+            <rect x="25" y="125" width="45" height="12" rx="3" fill="#c8b898"/>
+            <circle cx="52" cy="50" r="28" fill="#e8a040"/>
+            <circle cx="52" cy="50" r="24" fill="#e8a040"/>
+            <ellipse cx="42" cy="46" rx="6" ry="7" fill="white"/>
+            <ellipse cx="62" cy="46" rx="6" ry="7" fill="white"/>
+            <circle cx="43" cy="47" r="3" fill="#2a2040"/>
+            <circle cx="63" cy="47" r="3" fill="#2a2040"/>
+            <circle cx="44" cy="46" r="1" fill="white"/>
+            <circle cx="64" cy="46" r="1" fill="white"/>
+            <ellipse cx="52" cy="55" rx="3" ry="2" fill="#e06060"/>
+            <path d="M49 58 Q52 62 55 58" stroke="#2a2040" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <line x1="30" y1="50" x2="18" y2="48" stroke="#c8a060" stroke-width="1.5"/>
+            <line x1="30" y1="54" x2="16" y2="56" stroke="#c8a060" stroke-width="1.5"/>
+            <line x1="74" y1="50" x2="86" y2="48" stroke="#c8a060" stroke-width="1.5"/>
+            <line x1="74" y1="54" x2="88" y2="56" stroke="#c8a060" stroke-width="1.5"/>
+            <path d="M32 28 L38 12 L46 24" fill="#e8a040"/>
+            <path d="M72 28 L66 12 L58 24" fill="#e8a040"/>
+            <path d="M32 28 L38 16 L46 24" fill="#f0c078"/>
+            <path d="M72 28 L66 16 L58 24" fill="#f0c078"/>
+            <rect x="42" y="80" width="20" height="25" rx="2" fill="#2a3a6a"/>
+            <rect x="44" y="82" width="16" height="8" rx="1" fill="#fff"/>
+            <rect x="46" y="92" width="3" height="8" rx="1" fill="#c8a060"/>
+            <rect x="51" y="92" width="3" height="8" rx="1" fill="#c8a060"/>
+            <rect x="56" y="80" width="8" height="20" rx="1" fill="#e8d8b0"/>
+            <rect x="58" y="82" width="4" height="6" rx="1" fill="#b8a888"/>
+            <rect x="65" y="105" width="20" height="8" rx="2" fill="#c8a060"/>
+            <path d="M28 120 Q24 108 30 100" stroke="#e8a040" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <rect x="45" y="65" width="14" height="3" rx="1" fill="#2a3a6a"/>
+          </svg>
+        </div>
+
+        <!-- Cat Right -->
+        <div class="login-cat-right">
+          <svg width="140" height="160" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="70" cy="145" rx="25" ry="8" fill="#e8e0d4" opacity=".4"/>
+            <circle cx="80" cy="140" r="18" fill="#4aa8c8"/>
+            <circle cx="80" cy="135" r="10" fill="#e8e0d4"/>
+            <ellipse cx="76" cy="133" rx="3" ry="3.5" fill="#2a2040"/>
+            <ellipse cx="84" cy="133" rx="3" ry="3.5" fill="#2a2040"/>
+            <circle cx="77" cy="132" r="1" fill="white"/>
+            <circle cx="85" cy="132" r="1" fill="white"/>
+            <path d="M78 138 Q80 141 82 138" stroke="#2a2040" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <circle cx="70" cy="55" r="28" fill="#e8a040"/>
+            <circle cx="70" cy="55" r="24" fill="#e8a040"/>
+            <path d="M48 36 L54 18 L62 32" fill="#e8a040"/>
+            <path d="M92 36 L86 18 L78 32" fill="#e8a040"/>
+            <path d="M48 36 L54 22 L62 32" fill="#f0c078"/>
+            <path d="M92 36 L86 22 L78 32" fill="#f0c078"/>
+            <circle cx="60" cy="51" r="7" fill="white"/>
+            <circle cx="80" cy="51" r="7" fill="white"/>
+            <circle cx="60" cy="52" r="3.5" fill="#2a2040"/>
+            <circle cx="80" cy="52" r="3.5" fill="#2a2040"/>
+            <circle cx="61" cy="51" r="1.2" fill="white"/>
+            <circle cx="81" cy="51" r="1.2" fill="white"/>
+            <circle cx="60" cy="51" r="10" fill="none" stroke="#8a7040" stroke-width="1.5"/>
+            <circle cx="80" cy="51" r="10" fill="none" stroke="#8a7040" stroke-width="1.5"/>
+            <line x1="50" y1="51" x2="40" y2="49" stroke="#8a7040" stroke-width="1.5"/>
+            <line x1="50" y1="51" x2="40" y2="53" stroke="#8a7040" stroke-width="1.5"/>
+            <line x1="90" y1="51" x2="100" y2="49" stroke="#8a7040" stroke-width="1.5"/>
+            <line x1="90" y1="51" x2="100" y2="53" stroke="#8a7040" stroke-width="1.5"/>
+            <ellipse cx="70" cy="60" rx="3" ry="2" fill="#e06060"/>
+            <path d="M67 63 Q70 67 73 63" stroke="#2a2040" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <line x1="46" y1="55" x2="32" y2="52" stroke="#c8a060" stroke-width="1.5"/>
+            <line x1="46" y1="59" x2="30" y2="60" stroke="#c8a060" stroke-width="1.5"/>
+            <line x1="94" y1="55" x2="108" y2="52" stroke="#c8a060" stroke-width="1.5"/>
+            <line x1="94" y1="59" x2="110" y2="60" stroke="#c8a060" stroke-width="1.5"/>
+            <rect x="58" y="85" width="24" height="30" rx="3" fill="#6a5a8a"/>
+            <rect x="62" y="89" width="16" height="22" rx="2" fill="#a8d8f0"/>
+            <circle cx="70" cy="100" r="4" fill="#5a9ab8"/>
+            <path d="M40 85 Q36 95 38 105" stroke="#e8a040" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M55 95 L50 100 L55 105" fill="#e8a040"/>
+          </svg>
+        </div>
+
+        <div class="login-card-wrapper">
+          <div class="login-card">
+            <h2>LOG IN TO YOUR PORTAL</h2>
+            <p class="subtitle">Log in with username and password</p>
+
+            <form id="login-form" onsubmit="return handleLogin(event)">
+              <div class="form-group">
+                <label>Username</label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control" id="login-user" placeholder="Enter Username" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <div class="input-wrapper">
+                  <input type="password" class="form-control" id="login-pass" placeholder="Enter Password" required>
+                  <button type="button" class="input-toggle" onclick="togglePass('login-pass', this)">&#128065;</button>
+                </div>
+              </div>
+              <div class="form-error" id="login-error" style="text-align:center;margin-bottom:.5rem;">Credenciales incorrectas</div>
+              <button type="submit" class="btn btn-primary">LOG IN</button>
+            </form>
+
+            <div class="auth-links">
+              <a href="#" class="forgot-link" onclick="return false;">Forgot Password?</a>
+              Don't have an account? <a href="#" onclick="showScreen('screen-register')">Sign Up</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <strong>Powered by Global Education Alliance</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== REGISTER ==================== -->
+  <div class="screen" id="screen-register">
+    <div class="register-layout">
+      <nav class="login-topbar">
+        <div class="login-topbar-logo">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="22" width="42" height="52" rx="3" fill="#5a4a7a" stroke="#4a3a6a" stroke-width="2"/>
+            <rect x="20" y="27" width="32" height="42" rx="2" fill="#e8e0f4"/>
+            <line x1="26" y1="36" x2="46" y2="36" stroke="#b8a8d0" stroke-width="2"/>
+            <line x1="26" y1="42" x2="46" y2="42" stroke="#b8a8d0" stroke-width="2"/>
+            <line x1="26" y1="48" x2="40" y2="48" stroke="#b8a8d0" stroke-width="2"/>
+            <path d="M50 14 L36 28 L64 28 Z" fill="#5a4a7a"/>
+            <rect x="47" y="28" width="6" height="16" rx="1" fill="#5a4a7a"/>
+            <ellipse cx="50" cy="52" rx="14" ry="6" fill="#5a4a7a"/>
+            <path d="M36 52 L50 62 L64 52" fill="none" stroke="#4a3a6a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <ul class="login-topbar-nav">
+          <li>Overview</li>
+          <li>Profile</li>
+          <li>Parents</li>
+          <li>Teachers</li>
+          <li>Contact</li>
+        </ul>
+      </nav>
+
+      <div class="register-body">
+        <div class="login-card" style="max-width:540px;">
+          <h2>CREATE YOUR ACCOUNT</h2>
+          <p class="subtitle">Complete your details to register</p>
+
+          <form id="register-form" onsubmit="return handleRegister(event)">
+            <div class="form-group">
+              <label>Full Name</label>
+              <div class="input-wrapper">
+                <input type="text" class="form-control" id="reg-name" placeholder="Ej: Juan P\u00e9rez Garc\u00eda" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email</label>
+                <div class="input-wrapper">
+                  <input type="email" class="form-control" id="reg-email" placeholder="correo@ejemplo.com" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Area</label>
+                <div class="input-wrapper">
+                  <select class="form-control" id="reg-area" required>
+                    <option value="">Select...</option>
+                    <option value="Matem\u00e1ticas">Matem\u00e1ticas</option>
+                    <option value="Comunicaci\u00f3n">Comunicaci\u00f3n</option>
+                    <option value="Ciencias">Ciencias</option>
+                    <option value="Historia">Historia</option>
+                    <option value="Ingl\u00e9s">Ingl\u00e9s</option>
+                    <option value="Arte">Arte</option>
+                    <option value="Educaci\u00f3n F\u00edsica">Educaci\u00f3n F\u00edsica</option>
+                    <option value="Psicolog\u00eda">Psicolog\u00eda</option>
+                    <option value="Otra">Otra</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Username</label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control" id="reg-user" placeholder="Ej: jperez" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Document N\u00b0</label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control" id="reg-doc" placeholder="Ej: 45678901" required>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <div class="input-wrapper">
+                <input type="password" class="form-control" id="reg-pass" placeholder="Min 6 characters" required minlength="6">
+                <button type="button" class="input-toggle" onclick="togglePass('reg-pass', this)">&#128065;</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <div class="input-wrapper">
+                <input type="password" class="form-control" id="reg-pass2" placeholder="Repeat password" required minlength="6">
+                <button type="button" class="input-toggle" onclick="togglePass('reg-pass2', this)">&#128065;</button>
+              </div>
+            </div>
+            <div class="form-error" id="reg-error" style="text-align:center;margin-bottom:.5rem;"></div>
+            <button type="submit" class="btn btn-primary">CREATE ACCOUNT</button>
+          </form>
+
+          <div class="auth-links">
+            Already have an account? <a href="#" onclick="showScreen('screen-login')">Log In</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <strong>Powered by Global Education Alliance</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WELCOME / ROLE SELECTION ==================== -->
+  <div class="screen" id="screen-welcome">
+    <div class="welcome-layout">
+      <!-- Library decorative background -->
+      <div class="library-decor">
+        <!-- Shelves -->
+        <div class="lib-shelf" style="left:2%;bottom:20%;width:80px;height:8px;"></div>
+        <div class="lib-shelf" style="left:2%;bottom:40%;width:80px;height:8px;"></div>
+        <div class="lib-shelf" style="left:2%;bottom:60%;width:80px;height:8px;"></div>
+        <div class="lib-shelf" style="right:2%;bottom:25%;width:90px;height:8px;"></div>
+        <div class="lib-shelf" style="right:2%;bottom:45%;width:90px;height:8px;"></div>
+        <div class="lib-shelf" style="right:2%;bottom:65%;width:90px;height:8px;"></div>
+        <!-- Books on shelves -->
+        <div class="lib-books" style="left:3%;bottom:21%;">
+          <div class="lib-book" style="width:8px;height:35px;background:#c86060;"></div>
+          <div class="lib-book" style="width:7px;height:30px;background:#6088c8;"></div>
+          <div class="lib-book" style="width:9px;height:38px;background:#60a868;"></div>
+          <div class="lib-book" style="width:6px;height:28px;background:#c8a040;"></div>
+          <div class="lib-book" style="width:8px;height:33px;background:#a068c8;"></div>
+          <div class="lib-book" style="width:7px;height:36px;background:#c87840;"></div>
+        </div>
+        <div class="lib-books" style="left:3%;bottom:41%;">
+          <div class="lib-book" style="width:8px;height:32px;background:#4088a8;"></div>
+          <div class="lib-book" style="width:9px;height:36px;background:#c84060;"></div>
+          <div class="lib-book" style="width:7px;height:28px;background:#60c880;"></div>
+          <div class="lib-book" style="width:8px;height:34px;background:#c8a840;"></div>
+          <div class="lib-book" style="width:6px;height:30px;background:#8060c8;"></div>
+        </div>
+        <div class="lib-books" style="left:3%;bottom:61%;">
+          <div class="lib-book" style="width:7px;height:30px;background:#c86840;"></div>
+          <div class="lib-book" style="width:8px;height:34px;background:#40a8c8;"></div>
+          <div class="lib-book" style="width:9px;height:38px;background:#c84040;"></div>
+          <div class="lib-book" style="width:6px;height:26px;background:#60c860;"></div>
+        </div>
+        <div class="lib-books" style="right:3%;bottom:26%;">
+          <div class="lib-book" style="width:8px;height:34px;background:#a840c8;"></div>
+          <div class="lib-book" style="width:7px;height:30px;background:#c8a040;"></div>
+          <div class="lib-book" style="width:9px;height:36px;background:#40c8a8;"></div>
+          <div class="lib-book" style="width:8px;height:32px;background:#c86060;"></div>
+          <div class="lib-book" style="width:6px;height:28px;background:#6068c8;"></div>
+        </div>
+        <div class="lib-books" style="right:3%;bottom:46%;">
+          <div class="lib-book" style="width:9px;height:36px;background:#60c8a8;"></div>
+          <div class="lib-book" style="width:7px;height:30px;background:#c84080;"></div>
+          <div class="lib-book" style="width:8px;height:34px;background:#a8c840;"></div>
+          <div class="lib-book" style="width:6px;height:28px;background:#c88040;"></div>
+        </div>
+        <div class="lib-books" style="right:3%;bottom:66%;">
+          <div class="lib-book" style="width:8px;height:32px;background:#c8c040;"></div>
+          <div class="lib-book" style="width:7px;height:30px;background:#4088c8;"></div>
+          <div class="lib-book" style="width:9px;height:38px;background:#c860a8;"></div>
+        </div>
+        <!-- Decorative cats -->
+        <div class="lib-cat" style="left:1%;top:22%;">&#128049;</div>
+        <div class="lib-cat" style="right:1%;top:18%;">&#128062;</div>
+        <div class="lib-cat" style="left:4%;top:58%;">&#128568;</div>
+        <div class="lib-cat" style="right:3%;top:52%;">&#128008;</div>
+      </div>
+
+      <!-- Top Banner -->
+      <div class="welcome-top-banner">
+        <svg class="logo-circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" fill="#5a4a7a"/>
+          <circle cx="50" cy="50" r="42" fill="white"/>
+          <path d="M50 18 L28 42 L72 42 Z" fill="#5a4a7a"/>
+          <rect x="46" y="42" width="8" height="22" rx="1" fill="#5a4a7a"/>
+          <ellipse cx="50" cy="72" rx="20" ry="9" fill="#5a4a7a"/>
+          <path d="M30 72 L50 84 L70 72" fill="none" stroke="#4a3a6a" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="50" cy="50" r="18" fill="none" stroke="#5a4a7a" stroke-width="2" stroke-dasharray="4 3"/>
+        </svg>
+        <div>
+          <h1>GLOBAL SCHOLARSHIP FOR EDUCATORS</h1>
+          <p>2024-2025 Application Portal</p>
+        </div>
+      </div>
+
+      <!-- Main Body with Laptop -->
+      <div class="welcome-body">
+        <div class="laptop-frame">
+          <div class="laptop-screen">
+            <div class="laptop-screen-inner">
+              <div class="laptop-title-bar">
+                <h2>SELECT YOUR PATH TO BEGIN YOUR APPLICATION JOURNEY <span class="arrow">&rarr;</span></h2>
+              </div>
+              <div class="role-cards-area">
+                <div class="role-card teacher" onclick="enterAsRole('docente')">
+                  <div class="role-card-icon">
+                    <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="18" y="25" width="48" height="35" rx="4" fill="#8b6cb8" fill-opacity=".3"/>
+                      <rect x="22" y="30" width="40" height="25" rx="3" fill="#a88cd0" fill-opacity=".4"/>
+                      <line x1="28" y1="38" x2="56" y2="38" stroke="#6a4a90" stroke-width="2" opacity=".4"/>
+                      <line x1="28" y1="44" x2="56" y2="44" stroke="#6a4a90" stroke-width="2" opacity=".4"/>
+                      <line x1="28" y1="50" x2="48" y2="50" stroke="#6a4a90" stroke-width="2" opacity=".4"/>
+                      <rect x="12" y="55" width="48" height="8" rx="2" fill="#8b6cb8" fill-opacity=".25"/>
+                      <circle cx="62" cy="42" r="20" fill="#a88cd0" fill-opacity=".3"/>
+                      <path d="M54 35 Q62 25 70 35" fill="#60a860"/>
+                      <rect x="58" y="38" width="8" height="12" rx="1" fill="#c84040" opacity=".5"/>
+                      <ellipse cx="62" cy="36" rx="10" ry="8" fill="#e85050" fill-opacity=".5"/>
+                      <path d="M54 34 Q62 26 70 34" fill="#50a850" fill-opacity=".6"/>
+                    </svg>
+                  </div>
+                  <h3>APPLY AS A TEACHER</h3>
+                  <p>For all Educators, Teachers, Lecturers, and Education Professionals</p>
+                </div>
+
+                <div class="role-card psychologist" onclick="enterAsRole('psicologo')">
+                  <div class="role-card-icon">
+                    <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="45" cy="40" rx="24" ry="20" fill="#7ab0c8" fill-opacity=".3"/>
+                      <path d="M28 36 Q20 28 28 20 Q36 12 44 20 Q48 14 54 14 Q62 14 64 24 Q72 22 72 30 Q78 34 72 40 Q74 48 64 48 Q64 56 56 54 Q50 60 44 54 Q36 60 34 48 Q26 46 28 40 Z" fill="#7ab0c8" fill-opacity=".4"/>
+                      <circle cx="38" cy="36" r="4" fill="#7ab0c8" fill-opacity=".5"/>
+                      <circle cx="52" cy="36" r="4" fill="#7ab0c8" fill-opacity=".5"/>
+                      <path d="M40 46 Q46 52 52 46" stroke="#7ab0c8" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <!-- Wreath -->
+                      <path d="M20 50 Q15 40 20 30" stroke="#60a860" stroke-width="2" fill="none"/>
+                      <path d="M16 48 Q12 40 16 32" stroke="#70b870" stroke-width="1.5" fill="none"/>
+                      <path d="M70 50 Q75 40 70 30" stroke="#60a860" stroke-width="2" fill="none"/>
+                      <path d="M74 48 Q78 40 74 32" stroke="#70b870" stroke-width="1.5" fill="none"/>
+                      <circle cx="18" cy="45" r="3" fill="#60a860" fill-opacity=".6"/>
+                      <circle cx="14" cy="38" r="2.5" fill="#70b870" fill-opacity=".5"/>
+                      <circle cx="72" cy="45" r="3" fill="#60a860" fill-opacity=".6"/>
+                      <circle cx="76" cy="38" r="2.5" fill="#70b870" fill-opacity=".5"/>
+                    </svg>
+                  </div>
+                  <h3>APPLY AS A PSYCHOLOGIST</h3>
+                  <p>For all School Psychologists, Counselors, and Mental Health Professionals in Education.</p>
+                </div>
+              </div>
+              <div class="laptop-footer-bar">
+                <a href="#">About</a>
+                <a href="#">Eligibility</a>
+                <a href="#">Help</a>
+                <a href="#">Contact</a>
+              </div>
+            </div>
+          </div>
+          <div class="laptop-base"></div>
+        </div>
+      </div>
+
+      <div class="welcome-bottom-footer">
+        Powered by Global Education Alliance
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP ==================== -->
+  <div class="screen" id="screen-app">
+    <div class="app-layout">
+      <header class="app-header">
+        <div class="app-header-content">
+          <div class="app-header-left">
+            <div class="app-header-logo">
+              <svg viewBox="0 0 100 100" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="white"/>
+                <path d="M50 18 L28 42 L72 42 Z" fill="#6b5daa"/>
+                <rect x="46" y="42" width="8" height="22" rx="1" fill="#6b5daa"/>
+                <ellipse cx="50" cy="72" rx="20" ry="9" fill="#6b5daa"/>
+              </svg>
+            </div>
+            <h1 id="header-title">Teacher Panel</h1>
+          </div>
+          <div class="app-header-right">
+            <div class="user-chip">
+              <div class="user-chip-avatar" id="header-avatar">U</div>
+              <span id="header-username">User</span>
+            </div>
+            <button class="btn-header" onclick="showScreen('screen-welcome')">&#8592; Change Role</button>
+            <button class="btn-header danger" onclick="logout()">Log Out</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="container">
+        <section id="section-docente" class="section active">
+          <div class="stats-grid">
+            <div class="stat-box total"><div class="stat-icon">&#127891;</div><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total Scholars</div></div>
+            <div class="stat-box assist"><div class="stat-icon">&#9989;</div><div class="stat-num" id="stat-assist">0</div><div class="stat-lbl">Present Today</div></div>
+            <div class="stat-box absent"><div class="stat-icon">&#10060;</div><div class="stat-num" id="stat-absent">0</div><div class="stat-lbl">Absent Today</div></div>
+            <div class="stat-box alert"><div class="stat-icon">&#9888;</div><div class="stat-num" id="stat-alert">0</div><div class="stat-lbl">On Alert</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header-row">
+              <div class="card-title">&#128203; Scholarship Students List</div>
+              <button class="btn btn-teal btn-sm" onclick="openAddStudentModal()">+ Add Student</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>#</th><th>Name</th><th>Document</th><th>Grade</th><th>Attendance</th><th>Score</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="students-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="section-psicologo" class="section">
+          <div class="stats-grid">
+            <div class="stat-box alert"><div class="stat-icon">&#128233;</div><div class="stat-num" id="stat-alert-p">0</div><div class="stat-lbl">Active Cases</div></div>
+            <div class="stat-box assist"><div class="stat-icon">&#9989;</div><div class="stat-num" id="stat-resolved">0</div><div class="stat-lbl">Resolved</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">&#128233; Alert Tray</div>
+            <div id="alerts-tray"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: Observation -->
+  <div class="modal-overlay" id="modal-observation">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Register Observation</h2>
+        <button class="modal-close" onclick="closeModal('modal-observation')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Student</label>
+          <input type="text" class="form-control no-icon" id="obs-student-name" readonly>
+        </div>
+        <div class="form-group">
+          <label>Call Type</label>
+          <select class="form-control no-icon" id="obs-type">
+            <option value="Initial follow-up">Initial follow-up</option>
+            <option value="Support call">Support call</option>
+            <option value="Family coordination">Family coordination</option>
+            <option value="Psychological evaluation">Psychological evaluation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Observations</label>
+          <textarea class="form-control no-icon" id="obs-text" placeholder="Describe the observation..." style="min-height:100px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-observation')">Cancel</button>
+        <button class="btn btn-teal" onclick="saveObservation()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Student -->
+  <div class="modal-overlay" id="modal-add-student">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add New Student</h2>
+        <button class="modal-close" onclick="closeModal('modal-add-student')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-control no-icon" id="new-student-name" placeholder="Ej: Juan P\u00e9rez">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grade</label>
+            <select class="form-control no-icon" id="new-student-grade">
+              <option value="1ro Secundaria">1ro Secundaria</option>
+              <option value="2do Secundaria">2do Secundaria</option>
+              <option value="3ro Secundaria">3ro Secundaria</option>
+              <option value="4to Secundaria">4to Secundaria</option>
+              <option value="5to Secundaria">5to Secundaria</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Document N\u00b0</label>
+            <input type="text" class="form-control no-icon" id="new-student-doc" placeholder="Ej: 45678901">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-add-student')">Cancel</button>
+        <button class="btn btn-teal" onclick="addStudent()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    const USERS_KEY = 'becados_users';
+    const SESSION_KEY = 'becados_session';
+    const STUDENTS_KEY = 'becados_students';
+    const DEFAULT_STUDENTS = [
+      { id: 1, name: 'Mar\u00eda Garc\u00eda L\u00f3pez', grade: '3ro Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] },
+      { id: 2, name: 'Carlos Mart\u00ednez Ruiz', grade: '2do Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] },
+      { id: 3, name: 'Ana Hern\u00e1ndez D\u00edaz', grade: '1ro Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] },
+      { id: 4, name: 'Jos\u00e9 Luis Torres Pe\u00f1a', grade: '3ro Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] },
+      { id: 5, name: 'Laura S\u00e1nchez Morales', grade: '2do Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] },
+      { id: 6, name: 'Diego Ram\u00edrez Vargas', grade: '1ro Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] },
+      { id: 7, name: 'Sof\u00eda Flores Castro', grade: '3ro Secundaria', attendance: 'pending', score: null, status: 'normal', observations: [] }
+    ];
+
+    let currentUser = null;
+    let currentRole = null;
+    let currentObsStudentId = null;
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function getUsers() { const d = localStorage.getItem(USERS_KEY); if (d) { try { return JSON.parse(d); } catch { return []; } } return []; }
+    function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      const found = getUsers().find(u => u.username === user && u.password === pass);
+      if (found) {
+        currentUser = found;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(found));
+        showWelcome();
+        showToast('Welcome, ' + found.name, 'success');
+      } else {
+        const err = document.getElementById('login-error');
+        err.classList.add('show');
+        setTimeout(() => err.classList.remove('show'), 3000);
+      }
+      return false;
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const area = document.getElementById('reg-area').value;
+      const username = document.getElementById('reg-user').value.trim();
+      const doc = document.getElementById('reg-doc').value.trim();
+      const pass = document.getElementById('reg-pass').value;
+      const pass2 = document.getElementById('reg-pass2').value;
+      const errEl = document.getElementById('reg-error');
+
+      if (pass !== pass2) { errEl.textContent = 'Passwords do not match'; errEl.classList.add('show'); return false; }
+      const users = getUsers();
+      if (users.some(u => u.username === username)) { errEl.textContent = 'Username already exists'; errEl.classList.add('show'); return false; }
+      if (users.some(u => u.email === email)) { errEl.textContent = 'Email already registered'; errEl.classList.add('show'); return false; }
+
+      users.push({ id: Date.now(), name, email, area, username, doc, password: pass, createdAt: new Date().toISOString() });
+      saveUsers(users);
+      errEl.classList.remove('show');
+      showToast('Account created. Please log in.', 'success');
+      showScreen('screen-login');
+      document.getElementById('register-form').reset();
+      return false;
+    }
+
+    function togglePass(inputId, btn) {
+      const inp = document.getElementById(inputId);
+      if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '&#128064;'; }
+      else { inp.type = 'password'; btn.innerHTML = '&#128065;'; }
+    }
+
+    function getUserRole() {
+      if (!currentUser) return 'docente';
+      return currentUser.area === 'Psicolog\u00eda' ? 'psicologo' : 'docente';
+    }
+
+    function showWelcome() {
+      if (!currentUser) return;
+      showScreen('screen-welcome');
+    }
+
+    function enterAsRole(role) {
+      currentRole = role;
+      showScreen('screen-app');
+      const isDoc = role === 'docente';
+      document.getElementById('header-title').textContent = isDoc ? 'Teacher Panel' : 'Psychologist Panel';
+      const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      document.getElementById('header-avatar').textContent = initials;
+      document.getElementById('header-username').textContent = currentUser.name;
+      document.getElementById('section-docente').classList.toggle('active', isDoc);
+      document.getElementById('section-psicologo').classList.toggle('active', !isDoc);
+      renderAll();
+    }
+
+    function logout() {
+      currentUser = null;
+      currentRole = null;
+      localStorage.removeItem(SESSION_KEY);
+      showScreen('screen-login');
+      document.getElementById('login-form').reset();
+    }
+
+    function loadStudents() { const d = localStorage.getItem(STUDENTS_KEY); if (d) { try { return JSON.parse(d); } catch { return [...DEFAULT_STUDENTS]; } } return [...DEFAULT_STUDENTS]; }
+    function saveStudents(s) { localStorage.setItem(STUDENTS_KEY, JSON.stringify(s)); }
+    function getStudents() { return loadStudents(); }
+    function updateStudent(id, updates) { const s = getStudents(); const i = s.findIndex(x => x.id === id); if (i !== -1) { s[i] = { ...s[i], ...updates }; saveStudents(s); renderAll(); } }
+
+    function renderDocenteTable() {
+      const students = getStudents();
+      const tbody = document.getElementById('students-table-body');
+      tbody.innerHTML = students.map((s, i) => {
+        const ab = s.attendance === 'present' ? '<span class="badge badge-present">&#10003; Present</span>'
+          : s.attendance === 'absent' ? '<span class="badge badge-absent">&#10007; Absent</span>'
+          : '<span class="badge badge-pending">&#8987; Pending</span>';
+        const sb = s.status === 'alert' ? '<span class="badge badge-alert">&#9888; Alert</span>' : '<span class="badge badge-normal">&#10003; Normal</span>';
+        return `<tr>
+          <td>${i+1}</td><td><strong>${s.name}</strong></td><td>${s.doc||'-'}</td><td>${s.grade}</td><td>${ab}</td>
+          <td><div class="score-input"><input type="number" min="1" max="5" value="${s.score||''}" placeholder="-" onchange="updateScore(${s.id},this.value)"><span class="score-lbl">/5</span></div></td>
+          <td>${sb}</td>
+          <td><div style="display:flex;gap:.3rem;flex-wrap:wrap;">
+            <button class="btn btn-success btn-sm" onclick="markAttendance(${s.id},'present')" ${s.attendance==='present'?'disabled':''}>&#10003;</button>
+            <button class="btn btn-danger btn-sm" onclick="markAttendance(${s.id},'absent')" ${s.attendance==='absent'?'disabled':''}>&#10007;</button>
+            <button class="btn btn-warning btn-sm" onclick="remitToPsychology(${s.id})" ${s.status==='alert'?'disabled':''}>&#9888;</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteStudent(${s.id})">&#128465;</button>
+          </div></td></tr>`;
+      }).join('');
+    }
+
+    function renderStats() {
+      const s = getStudents(); const a = s.filter(x => x.status === 'alert');
+      document.getElementById('stat-total').textContent = s.length;
+      document.getElementById('stat-assist').textContent = s.filter(x => x.attendance === 'present').length;
+      document.getElementById('stat-absent').textContent = s.filter(x => x.attendance === 'absent').length;
+      document.getElementById('stat-alert').textContent = a.length;
+      document.getElementById('stat-alert-p').textContent = a.length;
+      document.getElementById('stat-resolved').textContent = s.filter(x => x.status === 'normal' && x.observations.length > 0).length;
+    }
+
+    function markAttendance(id, type) { updateStudent(id, { attendance: type }); showToast(type === 'present' ? 'Attendance registered' : 'Absence registered', type === 'present' ? 'success' : 'warning'); }
+    function updateScore(id, v) { const n = parseInt(v); if (v === '') { updateStudent(id, { score: null }); return; } if (n >= 1 && n <= 5) { updateStudent(id, { score: n }); showToast('Score: ' + n, 'info'); } else { showToast('Score must be 1-5', 'error'); } }
+    function remitToPsychology(id) { const st = getStudents().find(x => x.id === id); if (st && st.status !== 'alert') { updateStudent(id, { status: 'alert' }); showToast(st.name + ' referred', 'warning'); } }
+    function deleteStudent(id) { const st = getStudents().find(x => x.id === id); if (!st) return; if (!confirm('Delete "' + st.name + '"?')) return; saveStudents(getStudents().filter(x => x.id !== id)); renderAll(); showToast('Deleted', 'error'); }
+
+    function renderAlertsTray() {
+      const alerts = getStudents().filter(s => s.status === 'alert');
+      const tray = document.getElementById('alerts-tray');
+      if (!alerts.length) { tray.innerHTML = '<div class="empty-state"><div class="empty-icon">&#9989;</div><h3>No active cases</h3><p>When a teacher refers a case, it will appear here automatically.</p></div>'; return; }
+      tray.innerHTML = alerts.map(s => {
+        const ol = s.observations.length
+          ? `<div class="obs-list">${s.observations.map(o => `<div class="obs-item"><div><strong>${o.type}</strong></div><div>${o.text}</div><div class="obs-date">${o.date}</div></div>`).join('')}</div>`
+          : '<p style="font-size:.82rem;color:var(--text-muted);margin:.5rem 0;">No observations yet.</p>';
+        return `<div class="alert-card">
+          <div class="alert-card-header"><div><h3>${s.name}</h3><span class="badge badge-alert">&#9888; Alert</span></div>
+          <button class="btn btn-success btn-sm" onclick="resolveCase(${s.id})">&#10003; Resolve</button></div>
+          <div class="alert-card-meta"><span>&#127891; ${s.grade}</span><span>&#128221; Score: ${s.score!==null?s.score+'/5':'-'}</span></div>
+          ${ol}
+          <button class="btn btn-teal btn-sm" onclick="openObservationModal(${s.id})">&#128221; Add Observation</button>
+        </div>`;
+      }).join('');
+    }
+
+    function resolveCase(id) { updateStudent(id, { status: 'normal' }); showToast('Case resolved', 'success'); }
+    function openObservationModal(id) { currentObsStudentId = id; const s = getStudents().find(x => x.id === id); document.getElementById('obs-student-name').value = s ? s.name : ''; document.getElementById('obs-text').value = ''; document.getElementById('obs-type').selectedIndex = 0; document.getElementById('modal-observation').classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); currentObsStudentId = null; }
+    function saveObservation() {
+      const t = document.getElementById('obs-text').value.trim(); const ty = document.getElementById('obs-type').value;
+      if (!t) { showToast('Enter observation', 'error'); return; }
+      const s = getStudents(); const i = s.findIndex(x => x.id === currentObsStudentId);
+      if (i !== -1) { const now = new Date(); s[i].observations.push({ type: ty, text: t, date: now.toLocaleDateString('en-US') + ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }); saveStudents(s); closeModal('modal-observation'); renderAll(); showToast('Observation saved', 'success'); }
+    }
+
+    function showToast(msg, type) { const c = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = 'toast toast-' + (type||'info'); t.innerHTML = msg; c.appendChild(t); setTimeout(() => t.remove(), 3000); }
+    function openAddStudentModal() { document.getElementById('new-student-name').value = ''; document.getElementById('new-student-grade').selectedIndex = 0; document.getElementById('new-student-doc').value = ''; document.getElementById('modal-add-student').classList.add('active'); document.getElementById('new-student-name').focus(); }
+    function addStudent() {
+      const n = document.getElementById('new-student-name').value.trim(); const g = document.getElementById('new-student-grade').value; const d = document.getElementById('new-student-doc').value.trim();
+      if (!n) { showToast('Enter name', 'error'); return; } if (!d) { showToast('Enter document', 'error'); return; }
+      const s = getStudents(); if (s.some(x => x.doc === d)) { showToast('Document already exists', 'error'); return; }
+      const id = s.length ? Math.max(...s.map(x => x.id)) + 1 : 1;
+      s.push({ id, name: n, grade: g, doc: d, attendance: 'pending', score: null, status: 'normal', observations: [] });
+      saveStudents(s); closeModal('modal-add-student'); renderAll(); showToast('"' + n + '" added', 'success');
+    }
+
+    function renderAll() { renderDocenteTable(); renderAlertsTray(); renderStats(); }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const session = localStorage.getItem(SESSION_KEY);
+      if (session) { try { currentUser = JSON.parse(session); showWelcome(); } catch { showScreen('screen-login'); } }
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', function(e) { if (e.target === this) { this.classList.remove('active'); currentObsStudentId = null; } });
+    });
+  </script>
+</body>
+</html>
